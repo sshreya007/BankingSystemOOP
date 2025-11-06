@@ -98,3 +98,33 @@ class SavingsAccount extends BankAccount implements InterestBearing {
     addTransaction("Interest applied: \$${interest.toStringAsFixed(2)}");
   }
 }
+
+// ---------------------- CHECKING ACCOUNT ---------------------
+class CheckingAccount extends BankAccount {
+  static const double _overdraftFee = 35.0;
+
+  CheckingAccount(int accNo, String holder, double bal)
+    : super(accNo, holder, bal);
+
+  @override
+  void deposit(double amount) {
+    if (amount <= 0) {
+      print("Invalid deposit amount!");
+      return;
+    }
+    updateBalance(amount);
+    addTransaction("Deposited \$${amount.toStringAsFixed(2)}");
+  }
+
+  @override
+  void withdraw(double amount) {
+    updateBalance(-amount);
+    addTransaction("Withdrew \$${amount.toStringAsFixed(2)}");
+
+    if (balance < 0) {
+      updateBalance(-_overdraftFee);
+      addTransaction("Overdraft fee of \$$_overdraftFee applied");
+      print("Warning: Overdraft fee charged!");
+    }
+  }
+}
