@@ -128,3 +128,70 @@ class CheckingAccount extends BankAccount {
     }
   }
 }
+
+// ---------------------- PREMIUM ACCOUNT ----------------------
+class PremiumAccount extends BankAccount implements InterestBearing {
+  static const double _minBalance = 10000;
+  static const double _interestRate = 0.05;
+
+  PremiumAccount(int accNo, String holder, double bal)
+    : super(accNo, holder, bal);
+
+  @override
+  void deposit(double amount) {
+    if (amount <= 0) {
+      print("Invalid deposit amount!");
+      return;
+    }
+    updateBalance(amount);
+    addTransaction("Deposited \$${amount.toStringAsFixed(2)}");
+  }
+
+  @override
+  void withdraw(double amount) {
+    if (balance - amount < _minBalance) {
+      print("Cannot withdraw below minimum balance of \$$_minBalance");
+      return;
+    }
+    updateBalance(-amount);
+    addTransaction("Withdrew \$${amount.toStringAsFixed(2)}");
+  }
+
+  @override
+  double calculateInterest() => balance * _interestRate;
+
+  @override
+  void applyInterest() {
+    double interest = calculateInterest();
+    updateBalance(interest);
+    addTransaction("Interest applied: \$${interest.toStringAsFixed(2)}");
+  }
+}
+
+// ---------------------- STUDENT ACCOUNT ----------------------
+class StudentAccount extends BankAccount {
+  static const double _maxBalance = 5000;
+
+  StudentAccount(int accNo, String holder, double bal)
+    : super(accNo, holder, bal);
+
+  @override
+  void deposit(double amount) {
+    if (balance + amount > _maxBalance) {
+      print("Cannot exceed maximum balance of \$$_maxBalance");
+      return;
+    }
+    updateBalance(amount);
+    addTransaction("Deposited \$${amount.toStringAsFixed(2)}");
+  }
+
+  @override
+  void withdraw(double amount) {
+    if (amount > balance) {
+      print("Insufficient balance!");
+      return;
+    }
+    updateBalance(-amount);
+    addTransaction("Withdrew \$${amount.toStringAsFixed(2)}");
+  }
+}
