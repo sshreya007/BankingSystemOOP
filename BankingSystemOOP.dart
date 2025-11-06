@@ -195,3 +195,55 @@ class StudentAccount extends BankAccount {
     addTransaction("Withdrew \$${amount.toStringAsFixed(2)}");
   }
 }
+
+class Bank {
+  final List<BankAccount> _accounts = [];
+
+  void createAccount(BankAccount account) {
+    _accounts.add(account);
+    print("Account created for ${account.accountHolderName}");
+  }
+
+  BankAccount? findAccount(int accNo) {
+    try {
+      return _accounts.firstWhere((acc) => acc.accountNumber == accNo);
+    } catch (e) {
+      return null; // safely return null if not found
+    }
+  }
+
+  void transfer(int fromAcc, int toAcc, double amount) {
+    final sender = findAccount(fromAcc);
+    final receiver = findAccount(toAcc);
+
+    if (sender == null || receiver == null) {
+      print(" One or both accounts not found!");
+      return;
+    }
+
+    sender.withdraw(amount);
+    receiver.deposit(amount);
+
+    sender.addTransaction(
+      "Transferred \$${amount.toStringAsFixed(2)} to ${receiver.accountHolderName}",
+    );
+    receiver.addTransaction(
+      "Received \$${amount.toStringAsFixed(2)} from ${sender.accountHolderName}",
+    );
+  }
+
+  void applyMonthlyInterest() {
+    for (final acc in _accounts) {
+      if (acc is InterestBearing) {
+        (acc as InterestBearing).applyInterest(); // explicit cast
+      }
+    }
+  }
+
+  void generateReport() {
+    print("===== 🏦 BANK REPORT =====");
+    for (final acc in _accounts) {
+      acc.displayInfo();
+    }
+  }
+}
