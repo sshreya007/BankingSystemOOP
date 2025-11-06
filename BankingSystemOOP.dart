@@ -261,4 +261,13 @@ void main() {
   bank.createAccount(acc2);
   bank.createAccount(acc3);
   bank.createAccount(acc4);
+
+  acc1.withdraw(300);
+  acc2.withdraw(250);
+  acc3.deposit(1000);
+  acc4.deposit(4200);
+
+  bank.transfer(1001, 1002, 100);
+  bank.applyMonthlyInterest();
+  bank.generateReport();
 }
