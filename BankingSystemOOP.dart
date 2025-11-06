@@ -247,3 +247,18 @@ class Bank {
     }
   }
 }
+
+// ---------------------- MAIN FUNCTION -------------------------
+void main() {
+  Bank bank = Bank();
+
+  var acc1 = SavingsAccount(1001, "Alice", 1500);
+  var acc2 = CheckingAccount(1002, "Bob", 200);
+  var acc3 = PremiumAccount(1003, "Charlie", 20000);
+  var acc4 = StudentAccount(1004, "Daisy", 1000);
+
+  bank.createAccount(acc1);
+  bank.createAccount(acc2);
+  bank.createAccount(acc3);
+  bank.createAccount(acc4);
+}
