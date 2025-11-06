@@ -46,3 +46,9 @@ abstract class BankAccount {
     _balance += amount;
   }
 }
+
+// ---------------------- INTERFACE -----------------------------
+abstract class InterestBearing {
+  double calculateInterest();
+  void applyInterest();
+}
