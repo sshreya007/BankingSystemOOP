@@ -52,3 +52,49 @@ abstract class InterestBearing {
   double calculateInterest();
   void applyInterest();
 }
+
+// ----------------------SAVINGS ACCOUNT----------------------
+class SavingsAccount extends BankAccount implements InterestBearing {
+  int _withdrawals = 0;
+  static const double _interestRate = 0.02;
+  static const double _minBalance = 500;
+  static const int _withdrawalLimit = 3;
+
+  SavingsAccount(int accNo, String holder, double bal)
+    : super(accNo, holder, bal);
+
+  @override
+  void deposit(double amount) {
+    if (amount <= 0) {
+      print("Invalid deposit amount!");
+      return;
+    }
+    updateBalance(amount);
+    addTransaction("Deposited \$${amount.toStringAsFixed(2)}");
+  }
+
+  @override
+  void withdraw(double amount) {
+    if (_withdrawals >= _withdrawalLimit) {
+      print("Withdrawal limit reached!");
+      return;
+    }
+    if (balance - amount < _minBalance) {
+      print("Cannot withdraw below minimum balance of \$$_minBalance");
+      return;
+    }
+    updateBalance(-amount);
+    _withdrawals++;
+    addTransaction("Withdrew \$${amount.toStringAsFixed(2)}");
+  }
+
+  @override
+  double calculateInterest() => balance * _interestRate;
+
+  @override
+  void applyInterest() {
+    double interest = calculateInterest();
+    updateBalance(interest);
+    addTransaction("Interest applied: \$${interest.toStringAsFixed(2)}");
+  }
+}
